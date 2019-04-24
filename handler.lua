@@ -20,6 +20,7 @@ function xml_json_transformer:header_filter(conf)
 
   --ngx.header["content-encoding"] = "none"
   ngx.header["content-type"] = "application/json"
+  ngx.header["content-length"] = nil
 
 end
 
@@ -41,8 +42,9 @@ function xml_json_transformer:body_filter(config)
 
   local xml = handler.root
   json_text = cjson.encode(xml)
-  ngx.arg[2] = ""
   ngx.arg[1] = json_text
+  ngx.arg[2] = true
+
 end 
 
 -- set the plugin priority, which determines plugin execution order
