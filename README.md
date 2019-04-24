@@ -66,12 +66,47 @@ Content-Type: application/xml
 `````
 Response if plugins is ***enabled***
 `````
-> http :8000/xml2json
+> http :8000/xml2json Accept-Encoding:compress
 
 HTTP/1.1 200 OK
 (...)
 Content-Type: application/json
 (...)
 
-{"slideshow":{"1":{"slide":[{"title":"Wake up to WonderWidgets!","_attr":{"type":"all"}},{"item":[{"1":"Why","2":"are great","em":"WonderWidgets"},{},{"1":"Who","2":"WonderWidgets","em":"buys"}],"title":"Overview","_attr":{"type":"all"}}],"_attr":{"title":"Sample Slide Show","author":"Yours Truly","date":"Date of publication"}},"slide":[{"title":"Wake up to WonderWidgets!","_attr":{"type":"all"}},{"item":[{"1":"Why","2":"are great","em":"WonderWidgets"},{},{"1":"Who","2":"WonderWidgets","em":"buys"}],"title":"Overvie (...)
+{
+    "slideshow": {
+        "_attr": {
+            "author": "Yours Truly",
+            "date": "Date of publication",
+            "title": "Sample Slide Show"
+        },
+        "slide": [
+            {
+                "_attr": {
+                    "type": "all"
+                },
+                "title": "Wake up to WonderWidgets!"
+            },
+            {
+                "_attr": {
+                    "type": "all"
+                },
+                "item": [
+                    {
+                        "1": "Why",
+                        "2": "are great",
+                        "em": "WonderWidgets"
+                    },
+                    {},
+                    {
+                        "1": "Who",
+                        "2": "WonderWidgets",
+                        "em": "buys"
+                    }
+                ],
+                "title": "Overview"
+            }
+        ]
+    }
+}
 `````
