@@ -27,12 +27,12 @@ end
 ---[[ runs in the 'access_by_lua_block'
 function xml_json_transformer:body_filter(config)
   xml_json_transformer.super.body_filter(self)
-  
+
   -- Nginx output filters may be called multiple times for a single request because response body may be delivered in chunks. 
   -- Thus, the Lua code specified by in this directive may also run multiple times in the lifetime of a single HTTP request.
   
   local chunk, eof = ngx.arg[1], ngx.arg[2]
-
+  
   if ngx.ctx.buffered == nil then
       ngx.ctx.buffered = {}
   end
@@ -64,8 +64,6 @@ function xml_json_transformer:body_filter(config)
         ngx.arg[2] = true
       end
   end  
-end 
-
 end 
 
 -- set the plugin priority, which determines plugin execution order
