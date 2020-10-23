@@ -28,22 +28,43 @@ end
 function xml_json_transformer:body_filter(config)
   xml_json_transformer.super.body_filter(self)
   
- 
-  local ctx = ngx.ctx 
-  local response_body =''
+  -- Nginx output filters may be called multiple times for a single request because response body may be delivered in chunks. 
+  -- Thus, the Lua code specified by in this directive may also run multiple times in the lifetime of a single HTTP request.
+  
+  local chunk, eof = ngx.arg[1], ngx.arg[2]
 
-  local resp_body = string.sub(ngx.arg[1], 1, 1000)  
-    ctx.buffered = string.sub((ctx.buffered or "") .. resp_body, 1, 1000)
-    -- arg[2] is true if this is the last chunk
-    if ngx.arg[2] then
-      response_body = ctx.buffered
-    end
-  parser:parse(resp_body)
+  if ngx.ctx.buffered == nil then
+      ngx.ctx.buffered = {}
+  end
 
-  local xml = handler.root
-  json_text = cjson.encode(xml)
-  ngx.arg[1] = json_text
-  ngx.arg[2] = true
+  if chunk ~= "" and not ngx.is_subrequest then
+      table.insert(ngx.ctx.buffered, chunk)
+      ngx.arg[1] = nil
+  end
+
+  if eof then
+      local resp_body = table.concat(ngx.ctx.buffered)
+      ngx.ctx.buffered = nil
+      pretty.dump(resp_body)
+
+      local result ,errors = pcall(
+      function(resp_body)
+      	parser:parse(resp_body)
+      end, resp_body)
+
+      if not result then
+        ngx.log(ngx.ERR, "parse error")
+        ngx.arg[1] = resp_body
+        ngx.arg[2] = true
+      else
+        xml = handler.root
+        pretty.dump(xml)
+        json_text = cjson.encode(xml)
+        ngx.arg[1] = json_text
+        ngx.arg[2] = true
+      end
+  end  
+end 
 
 end 
 
