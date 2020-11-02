@@ -1,6 +1,5 @@
 -- Grab pluginname from module name
 local plugin_name = "xml-json-transformer"
-local responses = require "kong.tools.responses"
 local cjson = require "cjson"
 local table_concat = table.concat
 local xml2lua = require("xml2lua")

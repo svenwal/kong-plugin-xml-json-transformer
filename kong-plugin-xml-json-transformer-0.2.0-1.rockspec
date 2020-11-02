@@ -1,5 +1,5 @@
 package = "kong-plugin-xml-json-transformer"
-version = "0.1.0-1"
+version = "0.2.0-1"
 supported_platforms = {"linux", "macosx"}
 source = {
    url = "https://github.com/svenwal/kong-plugin-xml-json-transformer"
@@ -16,12 +16,14 @@ description = {
    license = "BSD 2-Clause License"
 }
 dependencies = {
-   "xml2lua >= 1.1",
+   "xml2lua >= 1.4",
 }
+
 build = {
-   type = "builtin",
-   modules = {
-      handler = "handler.lua",
-      schema = "schema.lua"
-   }
+  type = "builtin",
+  modules = {
+    -- TODO: add any additional files that the plugin consists of
+    ["kong.plugins."..pluginName..".handler"] = "kong/plugins/"..pluginName.."/handler.lua",
+    ["kong.plugins."..pluginName..".schema"] = "kong/plugins/"..pluginName.."/schema.lua",
+  }
 }

@@ -1,4 +1,9 @@
+# 0.2.0
+
+Moved to standard folder structure
+
 # 0.1.0
+
 First working version to receive upstream XML data and convert it to JSON. Works only on non-compressed traffic (backend does not send GZip)
 
 # 0.0.2

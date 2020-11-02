@@ -1,10 +1,8 @@
 # About
 `````xml-json-transformer````` is a [Kong](https://konghq.com) plugin which converts a XML response into JSON.
 
-## State of development
-***This plugin is in early stage of development and will work only in specific use cases. This is not even close being ready for real world use as of today***
-
 Backend with GZip enabled need to add the Accept-Encoding:compress header for now
+This can be done also using the request-transformer plugin
 
 ## Configuration parameters
 |FORM PARAMETER|DEFAULT|DESCRIPTION|
@@ -13,6 +11,10 @@ Backend with GZip enabled need to add the Accept-Encoding:compress header for no
 
 
 ## Examples
+
+Example backend used here: http://www.inf.fu-berlin.de/lehre/SS03/19560-P/Docs/JWSDP/tutorial/examples/jaxp/sax/samples/slideSample01.xml
+
+
 ````
 > http :8001/services/<SERVICE>/plugins name=xml-json-transformer 
 
