@@ -1,3 +1,7 @@
+# 0.3.0
+
+Rewritten plugin to use the PDK and because of this the plugin has a lot smaller / nicer code
+
 # 0.2.0
 
 Moved to standard folder structure

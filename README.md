@@ -7,7 +7,7 @@ This can be done also using the request-transformer plugin
 ## Configuration parameters
 |FORM PARAMETER|DEFAULT|DESCRIPTION|
 |:----|:------:|------:|
-|config.ignore_content_type|false|This parameter can be used if any traffic (not only application/xml) shall be tried to convert|
+|config.ignore_content_type|false|Note: not in 0.3 currently. This parameter can be used if any traffic (not only application/xml) shall be tried to convert|
 
 
 ## Examples
