@@ -1,16 +1,16 @@
--- config input validation scripts
-
-
--- plugin configuration
-
-
 return {
-  no_consumer = false, -- this plugin is available on APIs as well as on Consumers,
+  name = "xml-json-transformer",
   fields = {
-    ignore_content_type = {type = "boolean", default = false},
-    
+    { config = {
+        type = "record",
+        fields = {
+		{ ignore_content_type = {type = "boolean", default = false}, },
+        },
+      },
+    },
   },
-  self_check = function(schema, plugin_t, dao, is_updating)
-    return true
-  end
+  entity_checks = {
+    -- Add any checks here if needed
+  },
 }
+

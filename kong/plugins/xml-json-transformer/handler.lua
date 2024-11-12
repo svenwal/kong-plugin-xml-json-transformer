@@ -1,54 +1,31 @@
--- Grab pluginname from module name
-local plugin_name = "xml-json-transformer"
-local cjson = require "cjson"
-local table_concat = table.concat
+local xmljsontransformer = {
+    PRIORITY = 1010, -- set the plugin priority, which determines plugin execution order
+    VERSION = "0.9",
+  }
 local xml2lua = require("xml2lua")
 local handler = require("xmlhandler.tree")
 local parser = xml2lua.parser(handler)
+local cjson = require "cjson"
 
--- load the base plugin object and create a subclass
-local xml_json_transformer = require("kong.plugins.base_plugin"):extend()
-
--- constructor
-function xml_json_transformer:new()
-  xml_json_transformer.super.new(self, plugin_name)
+function xmljsontransformer:header_filter(config)
+  kong.response.set_header("content-type", "application/json")
+  kong.response.clear_header("content-length")
 end
 
-function xml_json_transformer:header_filter(conf)
-  xml_json_transformer.super.header_filter(self)
-
-  --ngx.header["content-encoding"] = "none"
-  ngx.header["content-type"] = "application/json"
-  ngx.header["content-length"] = nil
-
+function xmljsontransformer:access(config)
+	kong.service.request.enable_buffering()
 end
 
----[[ runs in the 'access_by_lua_block'
-function xml_json_transformer:body_filter(config)
-  xml_json_transformer.super.body_filter(self)
-  
- 
-  local ctx = ngx.ctx 
-  local response_body =''
+function xmljsontransformer:body_filter(config)
+  local response_body = kong.service.response.get_raw_body()
 
-  local resp_body = string.sub(ngx.arg[1], 1, 1000)  
-    ctx.buffered = string.sub((ctx.buffered or "") .. resp_body, 1, 1000)
-    -- arg[2] is true if this is the last chunk
-    if ngx.arg[2] then
-      response_body = ctx.buffered
-    end
-  parser:parse(resp_body)
+  parser:parse(response_body)
 
   local xml = handler.root
   json_text = cjson.encode(xml)
-  ngx.arg[1] = json_text
-  ngx.arg[2] = true
+  kong.response.set_raw_body(json_text)
+end
 
-end 
+return xmljsontransformer
 
--- set the plugin priority, which determines plugin execution order
-xml_json_transformer.PRIORITY = 990
-
--- return our plugin object
-return xml_json_transformer
 
